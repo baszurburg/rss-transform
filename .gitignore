@@ -1,0 +1,11 @@
+.idea
+
+npm-debug.log
+.DS_Store
+
+node_modules
+bower_components
+ACCOUNTS
+
+.env
+.tst
