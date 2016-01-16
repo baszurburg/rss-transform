@@ -8,7 +8,7 @@ var FeedParser = require('feedparser')
     };
 
 var req = request('http://icws.nl/rss?projection=1079')
-    , feedParser = new FeedParser([options]);
+    , feedParser = new FeedParser(options);
 
 req.on('error', function (error) {
     // handle any request errors

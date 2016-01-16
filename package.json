@@ -18,7 +18,12 @@
   "homepage": "https://github.com/baszurburg/rss-transform#readme",
   "dependencies": {
     "grunt": "~0.4.2",
+    "grunt-mkdir": "^0.1.2",
+    "grunt-contrib-clean": "^0.7.0",
+    "grunt-execute": "^0.2.2",
+    "jsonfile": "^2.2.3",
     "feedparser": "^1.1.4",
+    "sanitize-html":"^1.11.3",
     "request": "^2.0.0"
   }
 }
