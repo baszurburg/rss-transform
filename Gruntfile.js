@@ -13,7 +13,7 @@
       },
       execute: {
         target: {
-          src: ['test/fileSystem.js']
+          src: ['test/fileSystem.js', 'readAppSite.js']
         }
       },
       clean: {

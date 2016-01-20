@@ -2,7 +2,6 @@
   "name": "rss-transform",
   "version": "1.0.0",
   "description": "process a RSS feed",
-  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -24,6 +23,7 @@
     "jsonfile": "^2.2.3",
     "feedparser": "^1.1.4",
     "sanitize-html":"^1.11.3",
-    "request": "^2.0.0"
+    "request": "^2.0.0",
+    "request-json": "^0.5.5"
   }
 }

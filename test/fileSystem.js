@@ -26,19 +26,11 @@ fs.createReadStream(feed)
 
         var jsonfile = require('jsonfile');
 
-        var file = 'tmp/rss-filtered1.json';
+        var file = 'tmp/rss1-filtered.json';
 
         jsonfile.writeFile(file, resultFile, function (err) {
             console.error(err)
         });
-
-        //fs.writeFile("tmp/rss-filtered1.json", result, function(err) {
-        //    if(err) {
-        //        return console.log("Error wrting rss file - Error: " + err);
-        //    }
-        //
-        //    console.log("The file was saved!");
-        //});
 
     })
     .on('readable', function() {
@@ -51,16 +43,15 @@ fs.createReadStream(feed)
             //console.log(item);
 
             //populate result File
-            result.title = item.title;
+            result.content = {};
+
+            result.name = item.title;
             result.link = item.link;
             result.pubDate = item.pubDate;
-            result.description = sanitizeHtml(item.description);
+
+            result.content.extended = sanitizeHtml(item.description);
 
             resultFile.push(result);
         }
 
-
-
     });
-
-
