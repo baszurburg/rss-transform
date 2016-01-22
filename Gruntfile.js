@@ -12,8 +12,11 @@
         }
       },
       execute: {
-        target: {
+        retrieve: {
           src: ['test/fileSystem.js', 'readAppSite.js']
+        },
+        createPosts: {
+          src: ['createPosts.js']
         }
       },
       clean: {
@@ -27,7 +30,9 @@
     grunt.task.loadNpmTasks('grunt-mkdir');
     grunt.loadNpmTasks('grunt-execute');
 
-    grunt.registerTask('default', ['clean', 'mkdir', 'execute']);
+    grunt.registerTask('default', ['clean', 'mkdir', 'execute:retrieve']);
+
+    grunt.registerTask('createPost', ['execute:createPosts']);
 
   };
 })();
