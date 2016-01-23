@@ -17,7 +17,11 @@
         },
         createPosts: {
           src: ['createPosts.js']
+        },
+        prepareUpload: {
+          src: ['prepareUpload.js']
         }
+
       },
       clean: {
         all: ['tmp']
@@ -32,6 +36,7 @@
 
     grunt.registerTask('default', ['clean', 'mkdir', 'execute:retrieve']);
 
+    grunt.registerTask('prepareUpload', ['execute:prepareUpload']);
     grunt.registerTask('createPost', ['execute:createPosts']);
 
   };

@@ -1,10 +1,12 @@
 /**
  * Created by Zurburg on 1/17/2016.
  */
-var request = require('request-json');
-var client = request.createClient('http://localhost:3000/');
+var config = require('./.env'),
+    request = require('request-json');
 
-var urls = ['api/posts'];
+var client = request.createClient(config.host);
+
+var urls = [config.urls.posts];
 
 // build a loop here when we have multiple files
 

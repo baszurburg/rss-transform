@@ -1,13 +1,15 @@
 /**
  * Created by Zurburg on 1/22/2016.
  */
+var config = require('./.env'),
+    request = require('request-json');
 
-request = require('request-json');
-var client = request.createClient('http://localhost:3000/');
+// ToDo: get this from .env
 
-console.log('start createPosts');
+var client = request.createClient(config.host),
+    postsUrl = config.urls.posts;
 
-var url = ['api/posts'];
+// this should be coming from a file
 
 var data = {
 
@@ -34,7 +36,7 @@ var data = {
     "state": "published"
 };
 
-client.post(url[0], data, function(err, res, body) {
+client.post(postsUrl, data, function(err, res, body) {
     return console.log(res.statusCode);
 });
 
