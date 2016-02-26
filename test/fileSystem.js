@@ -41,6 +41,15 @@ fs.createReadStream(feed)
         while (item = stream.read()) {
             var result = {},
                 images = [],
+                brief = '',
+                sanitizedBrief = sanitizeHtml(item.description,
+                    { allowedTags:
+                        [ 'hr'],
+                        allowedAttributes: {
+                            'hr': [ 'class' ]
+                        },
+                        nonTextTags: [ 'table' ]
+                    }),
                 sanitized = sanitizeHtml(item.description,
                  { allowedTags:
                      [ 'h3', 'h4', 'h5', 'h6', 'p', 'a', 'ul', 'ol',
@@ -51,9 +60,14 @@ fs.createReadStream(feed)
 
             console.log('Got article: %s', item.title || item.description);
 
+            // ToDo: check brief for <hr class="readmore"> then take all chars before
+            // otherwise take just ~160 chars
+
             images = getImages(sanitizeHtml(item.description, {
                 allowedTags: [ 'img' ]
             }));
+
+
 
             //populate result file
             result.name = item.title;
@@ -62,6 +76,8 @@ fs.createReadStream(feed)
             result.images = images;
 
             result.content = {};
+
+
 
             result.content.extended = sanitized;
 

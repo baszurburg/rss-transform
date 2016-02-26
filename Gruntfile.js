@@ -12,8 +12,11 @@
         }
       },
       execute: {
-        retrieve: {
+        retrieveTest: {
           src: ['test/fileSystem.js', 'readAppSite.js']
+        },
+        retrieve: {
+          src: ['readRSS.js', 'readAppSite.js']
         },
         createPosts: {
           src: ['createPosts.js']
@@ -34,6 +37,7 @@
     grunt.task.loadNpmTasks('grunt-mkdir');
     grunt.loadNpmTasks('grunt-execute');
 
+    // retrieve the content
     grunt.registerTask('default', ['clean', 'mkdir', 'execute:retrieve']);
 
     grunt.registerTask('prepareUpload', ['execute:prepareUpload']);

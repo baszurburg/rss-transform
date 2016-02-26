@@ -2,15 +2,68 @@
  * Created by Zurburg on 1/22/2016.
  */
 var config = require('./.env'),
-    cloudinary = require('cloudinary');
-
-// ToDo: get this from .env
+    cloudinary = require('cloudinary'),
+    jsonfile = require('jsonfile'),
+    util = require('util'),
+    _ = require('lodash'),
+    uploadPosts = [];
 
 cloudinary.config(config.cloudinary);
 
 
-console.log('start prepareUpload');
-console.log(config);
+// read datafiles
+
+var newPosts = jsonfile.readFileSync('tmp/rss1-filtered.json'),
+    newPostsLength = newPosts.length,
+    i;
+
+var publishedPostsFile = jsonfile.readFileSync('tmp/posts.json'),
+    publishedPosts = publishedPostsFile.posts,
+    publishedPostsLength = publishedPosts.length,
+    j;
+
+/**************************************************
+ *              START PROCESSING
+ **************************************************/
+
+console.log("Already published posts: " + publishedPostsLength);
+console.log("Number of posts to process: " + newPostsLength);
+
+for (i=0; i < newPostsLength; i++) {
+    var newPost = newPosts[i];
+
+    var skip, etc;
+
+    // lodash,filter
+
+    console.log('Processing post # ' + i + ' - ' + newPost.name);
+
+    console.log(newPost.link);
+
+
+    _.forEach(newPost, function(value, key) {
+        console.log(key);
+
+        // process here
+
+    });
+
+}
+
+
+// We check each input file if it exists in publishedPosts
+
+// If it exists and state === 'published' and locked === false ->
+//      put it in posts_to_update
+//      otherwise skip and read next
+
+// If it does not exist put it in posts_to_create
+
+/*************************************************************************
+    Images
+**************************************************************************/
+
+// Create a cloudinary image object
 
 
 /*
@@ -46,7 +99,6 @@ console.log(config);
 
 
 var data = {
-    _id: "56a2b672d8b52f140119aaf7",
     name: "Metamorfose speelplek",
     externalLink: "http://www.rch-voetbal.nl/nieuws-en-verslagen/jeugd-nieuws/1940-metamorfose-speelplek",
     externalName: "1940-metamorfose-speelplek",
