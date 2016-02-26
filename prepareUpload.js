@@ -4,9 +4,14 @@
 var config = require('./.env'),
     cloudinary = require('cloudinary'),
     jsonfile = require('jsonfile'),
+    request = require('request-json'),
     util = require('util'),
     _ = require('lodash'),
     uploadPosts = [];
+
+var client = request.createClient(config.host),
+    postsUrl = config.urls.posts;
+
 
 cloudinary.config(config.cloudinary);
 
@@ -30,32 +35,84 @@ console.log("Already published posts: " + publishedPostsLength);
 console.log("Number of posts to process: " + newPostsLength);
 
 for (i=0; i < newPostsLength; i++) {
-    var newPost = newPosts[i];
-
-    var skip, etc;
-
-    // lodash,filter
+    var newPost = newPosts[i],
+        postAction = null,
+        preparedPost;
 
     console.log('Processing post # ' + i + ' - ' + newPost.name);
 
-    console.log(newPost.link);
+    postAction = determineAction(newPost);
 
+    console.log(postAction);
 
-    _.forEach(newPost, function(value, key) {
-        console.log(key);
+    if (postAction) {
+        preparedPost = preparePost(newPost);
+    }
 
-        // process here
+    if (postAction === 'CREATE') {
 
-    });
+        if (newPost.images.length > 0) {
+            console.log('newPost.images.length ' + newPost.images.length);
+            //cloudinary.uploader.upload(newPost.images[0],
+            //    function(result) {
+            //    console.log(result)
+            //});
+        }
+
+        // GO GO CREATE
+
+        //client.post(postsUrl, preparedPost, function(err, res, body) {
+        //    return console.log(res.statusCode);
+        //});
+
+    }
 
 }
 
+function determineAction(newPost) {
+    var result = 'CREATE';
 
-// We check each input file if it exists in publishedPosts
+    for (j=0; j < publishedPostsLength; j++) {
+        var publishedPost = publishedPosts[j];
 
-// If it exists and state === 'published' and locked === false ->
-//      put it in posts_to_update
-//      otherwise skip and read next
+        if (typeof publishedPost.externalLink !== 'undefined') {
+            if (publishedPost.externalLink === newPost.link) {
+                j = publishedPostsLength; // stop the loop
+                result = 'UPDATE';
+
+                if (publishedPost.locked) {
+                    result = false;
+                } else if (publishedPost.locked === 'archived') {
+                    result = false;
+                }
+
+            }
+        }
+    }
+
+    return result;
+}
+
+function preparePost(newPost) {
+    post = {};
+
+
+    post.name = newPost.name;
+    post.publishedDate = newPost.pubDate;
+    post.categories = [];
+
+    post.content = {};
+    post.content.brief = "to do";
+    post.content.extended = newPost.content.extended;
+    post.image = {};
+    post.externalName = "newPost.name";
+    post.externalLink = newPost.link;
+    post.state = "published";
+
+    return post;
+
+}
+
 
 // If it does not exist put it in posts_to_create
 
