@@ -51,7 +51,9 @@ feedParser
             , item;
 
         while (item = stream.read()) {
-            var result = {},
+            var count,
+                brief,
+                result = {},
                 images = [],
                 brief = '',
                 sanitizedBrief = sanitizeHtml(item.description,
@@ -72,9 +74,6 @@ feedParser
 
             console.log('Got article: %s', item.title || item.description);
 
-            // ToDo: check brief for <hr class="readmore"> then take all chars before
-            // otherwise take just ~160 chars
-
             images = getImages(sanitizeHtml(item.description, {
                 allowedTags: [ 'img' ]
             }));
@@ -89,6 +88,16 @@ feedParser
 
             result.content.extended = sanitized;
 
+            count = sanitizedBrief.indexOf('\r\n');
+            if (count === -1 || count > 325) {
+                brief = sanitizedBrief.substring(0, 320) + "...";
+            } else {
+                brief = sanitizedBrief.substring(0, count)
+            }
+            // ToDo: break the brief content nice at a period
+
+            result.content.brief = brief;
+
             resultFile.push(result);
         }
 });
@@ -102,7 +111,7 @@ var getImages = function(htmlFragment) {
     var parser = new htmlparser.Parser({
         onopentag: function(name, attribs){
             if(name === "img" && attribs.src){
-                console.log(attribs.src);
+                // console.log(attribs.src);
                 images.push(attribs.src);
             }
         },

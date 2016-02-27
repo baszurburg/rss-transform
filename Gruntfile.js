@@ -21,8 +21,8 @@
         createPosts: {
           src: ['createPosts.js']
         },
-        prepareUpload: {
-          src: ['prepareUpload.js']
+        upload: {
+          src: ['upload.js']
         }
 
       },
@@ -40,8 +40,9 @@
     // retrieve the content
     grunt.registerTask('default', ['clean', 'mkdir', 'execute:retrieve']);
 
-    grunt.registerTask('prepareUpload', ['execute:prepareUpload']);
-    grunt.registerTask('createPost', ['execute:createPosts']);
+    grunt.registerTask('upload', ['execute:upload']);
+    grunt.registerTask('populate', ['clean', 'mkdir', 'execute:retrieve', 'upload']);
+
 
   };
 })();

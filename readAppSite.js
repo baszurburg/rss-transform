@@ -17,7 +17,7 @@ client.get(urls[0], function(err, res, body) {
 
     // Read the posts and process
 
-    return console.log(body);
+    //return console.log(body);
 });
 
 
