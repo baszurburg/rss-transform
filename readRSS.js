@@ -86,7 +86,7 @@ feedParser
 
             result.content = {};
 
-            result.content.extended = sanitized;
+            result.content.extended = sanitized.replace(/\r\n/g, "");
 
             count = sanitizedBrief.indexOf('\r\n');
             if (count === -1 || count > 325) {
