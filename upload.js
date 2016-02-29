@@ -43,7 +43,9 @@ for (i=0; i < newPostsLength; i++) {
 
     postAction = determineAction(newPost);
 
-    console.log(postAction);
+    if (postAction) {
+        console.log(postAction);
+    }
 
     if (postAction) {
         preparedPost = preparePost(newPost);
@@ -67,11 +69,13 @@ function determineAction(newPost) {
                 result = 'UPDATE';
 
                 if (publishedPost.locked) {
+                    console.log('content is locked: ' + newPost.name);
                     result = false;
-                } else if (publishedPost.locked === 'archived') {
+                } else if (publishedPost.state === 'archived') {
+                    console.log('content is archived: ' + newPost.name);
                     result = false;
                 } else if (newPost.content.brief === publishedPost.content.brief && newPost.content.extended === publishedPost.content.extended) {
-                    console.log('content is equal - skip: ' + newPost.name);
+                    console.log('content is equal: ' + newPost.name);
                     result = false;
                 }
 
