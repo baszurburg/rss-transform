@@ -56,7 +56,7 @@ feedParser
                 result = {},
                 images = [],
                 brief = '',
-                sanitizedBrief = sanitizeHtml(item.description,
+                sanitizedForBrief = sanitizeHtml(item.description,
                     { allowedTags:
                         [ 'hr'],
                         allowedAttributes: {
@@ -88,13 +88,17 @@ feedParser
 
             result.content.extended = sanitized.replace(/\r\n/g, "");
 
-            count = sanitizedBrief.indexOf('\r\n');
+            count = sanitizedForBrief.indexOf('\r\n');
             if (count === -1 || count > 325) {
-                brief = sanitizedBrief.substring(0, 320) + "...";
+                count = sanitizedForBrief.substring(0, 325).lastIndexOf('.');
+                if (count === -1) {
+                    brief = sanitizedForBrief.substring(0, 320) + '...';
+                } else {
+                    brief = sanitizedForBrief.substring(0, count + 1);
+                }
             } else {
-                brief = sanitizedBrief.substring(0, count)
+                brief = sanitizedForBrief.substring(0, count)
             }
-            // ToDo: break the brief content nice at a period
 
             result.content.brief = brief;
 

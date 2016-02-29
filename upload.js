@@ -70,6 +70,9 @@ function determineAction(newPost) {
                     result = false;
                 } else if (publishedPost.locked === 'archived') {
                     result = false;
+                } else if (newPost.content.brief === publishedPost.content.brief && newPost.content.extended === publishedPost.content.extended) {
+                    console.log('content is equal - skip: ' + newPost.name);
+                    result = false;
                 }
 
             }
