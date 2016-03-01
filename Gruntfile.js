@@ -24,13 +24,11 @@
         upload: {
           src: ['upload.js']
         }
-
       },
       clean: {
         all: ['tmp']
       }
     });
-
 
     // load tasks from modules
     grunt.loadNpmTasks('grunt-contrib-clean');

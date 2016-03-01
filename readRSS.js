@@ -58,7 +58,7 @@ feedParser
                 brief = '',
                 sanitizedForBrief = sanitizeHtml(item.description,
                     { allowedTags:
-                        [ 'hr'],
+                        ['hr', 'br'],
                         allowedAttributes: {
                             'hr': [ 'class' ]
                         },
@@ -87,6 +87,7 @@ feedParser
             result.content = {};
 
             result.content.extended = sanitized.replace(/\r\n/g, "");
+            sanitizedForBrief = sanitizedForBrief.replace(/<br \/>/g, " ");
 
             count = sanitizedForBrief.indexOf('\r\n');
             if (count === -1 || count > 325) {

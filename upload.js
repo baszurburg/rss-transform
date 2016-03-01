@@ -37,7 +37,7 @@ console.log("Number of posts to process: " + newPostsLength);
 for (i=0; i < newPostsLength; i++) {
     var newPost = newPosts[i],
         postAction = null,
-        preparedPost;
+        preparedNewPost;
 
     console.log('Processing post # ' + i + ' - ' + newPost.name);
 
@@ -47,12 +47,9 @@ for (i=0; i < newPostsLength; i++) {
         console.log(postAction);
     }
 
-    if (postAction) {
-        preparedPost = preparePost(newPost);
-    }
-
     if (postAction === 'CREATE') {
-        createPost(newPost, _.clone(preparedPost));
+        preparedNewPost = prepareNewPost(newPost);
+        createPost(newPost, _.clone(preparedNewPost));
     }
 
 }
@@ -79,6 +76,13 @@ function determineAction(newPost) {
                     result = false;
                 }
 
+                // OK - UPDATE
+
+                if (result === 'UPDATE') {
+                    updatePost(publishedPost, newPost);
+                }
+
+
             }
         }
     }
@@ -86,7 +90,7 @@ function determineAction(newPost) {
     return result;
 }
 
-function preparePost(newPost) {
+function prepareNewPost(newPost) {
     post = {};
 
     post.name = newPost.name;
@@ -102,12 +106,10 @@ function preparePost(newPost) {
     post.state = "published";
 
     return post;
-
 }
 
-function createPost(newPost, preparedPost) {
+function createPost(newPost, preparedNewPost) {
     if (newPost.images.length > 0) {
-        console.log('newPost.images.length ' + newPost.images.length);
         cloudinary.uploader.upload(newPost.images[0],
             function(result) {
                 console.log(result);
@@ -123,19 +125,36 @@ function createPost(newPost, preparedPost) {
                 imageObj.url = result.url;
                 imageObj.secure_url = result.secure_url;
 
-                preparedPost.image = imageObj;
+                preparedNewPost.image = imageObj;
 
-                client.post(postsUrl, preparedPost, function(err, res, body) {
+                client.post(postsUrl, preparedNewPost, function(err, res, body) {
                     return console.log(res.statusCode);
                 });
 
             });
     } else {
-        client.post(postsUrl, preparedPost, function(err, res, body) {
+        client.post(postsUrl, preparedNewPost, function(err, res, body) {
             return console.log(res.statusCode);
         });
 
     }
+}
+
+function updatePost(publishedPost, newPost) {
+    var updateUrl = postsUrl + '/' + publishedPost._id;
+    var post = {};
+
+    console.log("WE ARE UPDATING: " + newPost.name);
+    console.log("URL: " + updateUrl);
+
+    post.name = newPost.name;
+    post.content = {};
+    post.content.brief = newPost.content.brief;
+    post.content.extended = newPost.content.extended;
+
+    client.patch(updateUrl, post, function(err, res, body) {
+        return console.log(res.statusCode);
+    });
 }
 
 
