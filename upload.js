@@ -10,7 +10,10 @@ var config = require('./.env'),
     uploadPosts = [];
 
 var client = request.createClient(config.host),
-    postsUrl = config.urls.posts;
+    postsUrl = config.urls.posts,
+    catAlgemeen = config.category.algemeen,
+    catJeugd = config.category.jeugd,
+    catVerslagen = config.category.verslagen;
 
 
 cloudinary.config(config.cloudinary);
@@ -82,7 +85,6 @@ function determineAction(newPost) {
                     updatePost(publishedPost, newPost);
                 }
 
-
             }
         }
     }
@@ -104,6 +106,19 @@ function prepareNewPost(newPost) {
     post.externalName = newPost.name;
     post.externalLink = newPost.link;
     post.state = "published";
+
+    post.categories = [];
+    if (newPost.link.indexOf('algemeen-clubnieuws') !== -1 ) {
+        post.categories.push(catAlgemeen);
+    }  else if (newPost.link.indexOf('jeugd-nieuws') !== -1 ) {
+        post.categories.push(catJeugd);
+    } else if (newPost.link.indexOf('jeugd') !== -1 ) {
+        post.categories.push(catJeugd);
+    } else if (newPost.link.indexOf('wedstrijd-verslagen') !== -1 ) {
+        post.categories.push(catVerslagen);
+    } else {
+        post.categories.push(catAlgemeen);
+    }
 
     return post;
 }
