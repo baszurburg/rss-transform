@@ -6,6 +6,7 @@ var config = require('./.env'),
     request = require('request-json'),
     Firebase = require("firebase"),
     sanitizeHtml = require('sanitize-html'),
+    htmlparser = require("htmlparser2"),
     util = require('util'),
     _ = require('lodash'),
     uploadPosts = [];
@@ -15,7 +16,7 @@ var client = request.createClient(config.host),
 
 var firebaseRef = new Firebase("https://intense-heat-7311.firebaseio.com/");
 
-var postsRef = firebaseRef.child("posts")
+var postsRef = firebaseRef.child("posts");
 
 // read datafiles
 
@@ -23,6 +24,9 @@ var publishedPostsFile = jsonfile.readFileSync('tmp/posts.json'),
     publishedPosts = publishedPostsFile.posts,
     publishedPostsLength = publishedPosts.length,
     j;
+
+var extendedContent = '';
+
 
 /**************************************************
  *              START PROCESSING
@@ -32,7 +36,8 @@ console.log(" ");
 console.log("Number posts read: " + publishedPostsLength);
 
 for (j=0; j < publishedPostsLength; j++) {
-    var publishedPost = publishedPosts[j];
+    var publishedPost = publishedPosts[j],
+        jsonContent = {};
 
     if (typeof publishedPost.state !== 'undefined') {
         if (publishedPost.state === 'published') {
@@ -43,16 +48,29 @@ for (j=0; j < publishedPostsLength; j++) {
                 { allowedTags: [],
                     allowedAttributes: []
                 });
-            publishedPost.content.extended = sanitizeHtml(publishedPost.content.extended,
+            extendedContent = sanitizeHtml(publishedPost.content.extended,
                 { allowedTags:
-                    ['p', 'strong', 'a'],
+                    ['p', 'strong', 'a', 'b', 'br'],
                     allowedAttributes: {
                         'a': [ 'href' ]
                     },
-                    nonTextTags: [ 'table' ]
+                    selfClosing: ['br'],
+                    exclusiveFilter: function(frame) {
+                        return (frame.tag === 'a' || frame.tag === 'strong' || frame.tag === 'b' || frame.tag === 'p' )  && !frame.text.trim()
+                    }
                 });
 
-            publishedPost.content.extended = publishedPost.content.extended.replace(/<br \/><br \/>/g, "<br \/>");
+            extendedContent = extendedContent.replace(/<br \/><br \/>/g, "<br \/>");
+            extendedContent = extendedContent.replace(/<br \/><br \/>/g, "<br \/>");
+            extendedContent = extendedContent.replace(/&amp;/g, "&");
+            extendedContent = extendedContent.replace(/&quote;/g, "'");
+
+            // Create a json of the content
+
+            jsonContent = parseContent(extendedContent);
+
+            //console.log('jsonContent: ' + JSON.stringify(jsonContent) );
+            publishedPost.content.extended = jsonContent;
 
             uploadPosts.push(publishedPost);
         }
@@ -70,4 +88,71 @@ var onComplete = function(error) {
     process.exit();
 };
 
+// WATCH IT
 postsRef.set(uploadPosts, onComplete);
+
+function parseContent(input) {
+    var output = [],
+        lastItem = '',
+        text = '',
+        href = '';
+
+    var parser = new htmlparser.Parser({
+        onopentag: function(name, attribs){
+            var tagObj = {};
+//            console.log('open: ' +  name);
+
+            if(name === "a"){
+//                console.log('attribs: ' + JSON.stringify(attribs) );
+                if (attribs.href) {
+                    href = attribs.href;
+                }
+            } else if ((name === 'p' || name === 'br') && !(lastItem === 'p' || lastItem === 'br')) {
+                tagObj.break = true;
+                output.push(tagObj);
+            }
+
+            lastItem = name;
+        },
+        ontext: function(text){
+            var textObj = {},
+                linkObj = {},
+                linkText = {};
+            text = text.trim();
+            if (text && text.toLowerCase() !== 'stand') {
+//                console.log("-->", text.trim());
+
+                if (lastItem === 'b' || lastItem === 'strong') {
+                    textObj[lastItem] = text;
+                } else if (lastItem === 'p' || lastItem === 'br') {
+                    textObj.text = text;
+                } else if (lastItem === 'a' && href) {
+                    textObj.a = [];
+                    linkObj.href = href;
+                    linkText.text = text;
+                    textObj.a.push(linkObj);
+                    textObj.a.push(linkText);
+                    href = '';
+                } else {
+                    textObj.text = text;
+                }
+
+                output.push(textObj);
+
+                lastItem = "text";
+            }
+
+        },
+        onclosetag: function(tagname){
+        }
+    }, {
+        lowerCaseTags: true,
+        lowerCaseAttributeNames: true,
+        recognizeSelfClosing: true
+    });
+
+    parser.write(input);
+    parser.end();
+
+    return output;
+}

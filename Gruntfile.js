@@ -18,6 +18,9 @@
         retrieve: {
           src: ['readRSS.js', 'readAppSite.js']
         },
+        rss: {
+          src: ['readRSS.js']
+        },
         retrieveAppSite: {
           src: ['readAppSite.js']
         },
@@ -39,6 +42,7 @@
     grunt.loadNpmTasks('grunt-execute');
 
     // retrieve the content
+    grunt.registerTask('rss', ['execute:rss']);
     grunt.registerTask('default', ['clean', 'mkdir', 'execute:retrieve']);
     grunt.registerTask('upload', ['execute:upload']);
     grunt.registerTask('populate', ['clean', 'mkdir', 'execute:retrieve', 'upload']);

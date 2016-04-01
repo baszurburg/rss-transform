@@ -52,7 +52,6 @@ feedParser
 
         while (item = stream.read()) {
             var count,
-                brief,
                 result = {},
                 images = [],
                 brief = '',
@@ -69,6 +68,13 @@ feedParser
                         [ 'h3', 'h4', 'h5', 'h6', 'p', 'a', 'ul', 'ol',
                             'nl', 'li', 'b', 'i', 'strong', 'em', 'strike', 'br', 'div'
                         ],
+                        allowedAttributes: {
+                            a: [ 'href', 'target' ]
+                        },
+                        selfClosing: ['br'],
+                        exclusiveFilter: function(frame) {
+                            return (frame.tag === 'a' || frame.tag === 'p' )  && !frame.text.trim()
+                        },
                         nonTextTags: [ 'table' ]
                     });
 
