@@ -63,7 +63,7 @@ for (j=0; j < publishedPostsLength; j++) {
             extendedContent = extendedContent.replace(/<br \/><br \/>/g, "<br \/>");
             extendedContent = extendedContent.replace(/<br \/><br \/>/g, "<br \/>");
             extendedContent = extendedContent.replace(/&amp;/g, "&");
-            extendedContent = extendedContent.replace(/&quote;/g, "'");
+            extendedContent = extendedContent.replace(/&quot;/g, "'");
 
             // Create a json of the content
 
@@ -71,6 +71,12 @@ for (j=0; j < publishedPostsLength; j++) {
 
             //console.log('jsonContent: ' + JSON.stringify(jsonContent) );
             publishedPost.content.extended = jsonContent;
+
+
+            // add image thumbnail
+            if (typeof  publishedPost.image === 'object') {
+                publishedPost.image.imageThumb = publishedPost.image.secure_url.replace(/upload/g, 'upload/c_thumb,g_face,h_90,w_90');
+            }
 
             uploadPosts.push(publishedPost);
         }

@@ -45,9 +45,9 @@
     grunt.registerTask('rss', ['execute:rss']);
     grunt.registerTask('default', ['clean', 'mkdir', 'execute:retrieve']);
     grunt.registerTask('upload', ['execute:upload']);
-    grunt.registerTask('populate', ['clean', 'mkdir', 'execute:retrieve', 'upload']);
     grunt.registerTask('retrieveAppSite', ['execute:retrieveAppSite']);
     grunt.registerTask('uploadFirebase', ['execute:uploadFirebase']);
+    grunt.registerTask('populate', ['clean', 'mkdir', 'execute:retrieve', 'upload']);
     grunt.registerTask('processFirebase', ['execute:retrieveAppSite', 'execute:uploadFirebase']);
   };
 })();
