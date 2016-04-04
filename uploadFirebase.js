@@ -75,7 +75,7 @@ for (j=0; j < publishedPostsLength; j++) {
 
             // add image thumbnail
             if (typeof  publishedPost.image === 'object') {
-                publishedPost.image.imageThumb = publishedPost.image.secure_url.replace(/upload/g, 'upload/c_thumb,g_face,h_90,w_90');
+                publishedPost.image.imageThumb = publishedPost.image.secure_url.replace(/upload/g, 'upload/g_faces,c_thumb,h_90,ar_5:3,z_0.8');
             }
 
             uploadPosts.push(publishedPost);
