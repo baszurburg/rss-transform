@@ -14,7 +14,7 @@ var config = require('./.env'),
 var client = request.createClient(config.host),
     postsUrl = config.urls.posts;
 
-var firebaseRef = new Firebase("https://intense-heat-7311.firebaseio.com/");
+var firebaseRef = new Firebase(config.firebase);
 
 var postsRef = firebaseRef.child("posts");
 
