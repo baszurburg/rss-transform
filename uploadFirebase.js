@@ -35,50 +35,70 @@ console.log("- - - Start Upload Firebase - - - ");
 console.log(" ");
 console.log("Number posts read: " + publishedPostsLength);
 
+var maxDate = new Date();
+    maxDate.setDate(maxDate.getDate() - 25);
+
 for (j=0; j < publishedPostsLength; j++) {
     var publishedPost = publishedPosts[j],
-        jsonContent = {};
+        jsonContent = {},
+        skipPost = false;
 
     if (typeof publishedPost.state !== 'undefined') {
         if (publishedPost.state === 'published') {
 
-            // Sanitize the data before uploading to Firebase
 
-            publishedPost.content.brief = sanitizeHtml(publishedPost.content.brief,
-                { allowedTags: [],
-                    allowedAttributes: []
-                });
-            extendedContent = sanitizeHtml(publishedPost.content.extended,
-                { allowedTags:
-                    ['p', 'strong', 'a', 'b', 'br'],
-                    allowedAttributes: {
-                        'a': [ 'href' ]
-                    },
-                    selfClosing: ['br'],
-                    exclusiveFilter: function(frame) {
-                        return (frame.tag === 'a' || frame.tag === 'strong' || frame.tag === 'b' || frame.tag === 'p' )  && !frame.text.trim()
-                    }
-                });
+            // If categorie is verslagen
+            // Neem geen verlagen ouder dan 28 dagen
 
-            extendedContent = extendedContent.replace(/<br \/><br \/>/g, "<br \/>");
-            extendedContent = extendedContent.replace(/<br \/><br \/>/g, "<br \/>");
-            extendedContent = extendedContent.replace(/&amp;/g, "&");
-            extendedContent = extendedContent.replace(/&quot;/g, "'");
-
-            // Create a json of the content
-
-            jsonContent = parseContent(extendedContent);
-
-            //console.log('jsonContent: ' + JSON.stringify(jsonContent) );
-            publishedPost.content.extended = jsonContent;
-
-
-            // add image thumbnail
-            if (typeof  publishedPost.image === 'object') {
-                publishedPost.image.imageThumb = publishedPost.image.secure_url.replace(/upload/g, 'upload/g_faces,c_thumb,h_90,ar_5:3,z_0.8');
+            // Verslagen mogen niet ouder zijn dan 25 dagen
+            var postDate = Date.parse(publishedPost.publishedDate.toString().substr(0,10));
+            if (publishedPost.categories[0] === '56d61c943d4aaadc196caa51' || publishedPost.categories[0] === '56a2b653d8b52f140119aaf6') {
+                if (postDate < maxDate) {
+                    skipPost = true;
+                }
             }
 
-            uploadPosts.push(publishedPost);
+
+            if (!skipPost) {
+                // Sanitize the data before uploading to Firebase
+
+                publishedPost.content.brief = sanitizeHtml(publishedPost.content.brief,
+                    { allowedTags: [],
+                        allowedAttributes: []
+                    });
+                extendedContent = sanitizeHtml(publishedPost.content.extended,
+                    { allowedTags:
+                        ['p', 'strong', 'a', 'b', 'br'],
+                        allowedAttributes: {
+                            'a': [ 'href' ]
+                        },
+                        selfClosing: ['br'],
+                        exclusiveFilter: function(frame) {
+                            return (frame.tag === 'a' || frame.tag === 'strong' || frame.tag === 'b' || frame.tag === 'p' )  && !frame.text.trim()
+                        }
+                    });
+
+                extendedContent = extendedContent.replace(/<br \/><br \/>/g, "<br \/>");
+                extendedContent = extendedContent.replace(/<br \/><br \/>/g, "<br \/>");
+                extendedContent = extendedContent.replace(/&amp;/g, "&");
+                extendedContent = extendedContent.replace(/&quot;/g, "'");
+
+                // Create a json of the content
+
+                jsonContent = parseContent(extendedContent);
+
+                //console.log('jsonContent: ' + JSON.stringify(jsonContent) );
+                publishedPost.content.extended = jsonContent;
+
+
+                // add image thumbnail
+                if (typeof  publishedPost.image === 'object') {
+                    publishedPost.image.imageThumb = publishedPost.image.secure_url.replace(/upload/g, 'upload/g_faces,c_thumb,h_90,ar_5:3,z_0.8');
+                }
+
+                uploadPosts.push(publishedPost);
+            }
+
         }
     }
 }
