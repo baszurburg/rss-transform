@@ -95,8 +95,12 @@ function determineAction(newPost) {
 function prepareNewPost(newPost) {
     post = {};
 
+
+
+
     post.name = newPost.name;
-    post.publishedDate = newPost.pubDate;
+    //post.publishedDate = newPost.pubDate;
+    post.publishedDate = new Date().toISOString();
     post.categories = [];
 
     post.content = {};
@@ -166,6 +170,12 @@ function updatePost(publishedPost, newPost) {
     post.content = {};
     post.content.brief = newPost.content.brief;
     post.content.extended = newPost.content.extended;
+
+
+    if (post.name.indexOf("Speelschema") === 0) {
+        post.publishedDate = new Date().toISOString();
+    }
+
 
     client.patch(updateUrl, post, function(err, res, body) {
         return console.log(res.statusCode);
