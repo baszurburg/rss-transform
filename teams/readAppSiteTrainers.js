@@ -1,15 +1,15 @@
 /**
- * Created by Zurburg on 1/17/2016.
+ * Created by Zurburg on 4/16/2016.
  *
- * This file reads the posts in the App CMS file
+ * This file reads the trainers the App CMS file
  *
  */
-var config = require('./.env'),
+var config = require('../.env'),
     request = require('request-json');
 
 var client = request.createClient(config.host);
 
-var urls = [config.urls.posts];
+var urls = [config.urls.trainers];
 
 // build a loop here when we have multiple files
 
@@ -21,7 +21,7 @@ client.get(urls[0], function(err, res, body) {
 });
 
 
-client.saveFile(urls[0], 'tmp/posts.json', function(err, res, body) {
+client.saveFile(urls[0], 'tmp/trainers.json', function(err, res, body) {
 
     // writes the file with posts to the filesystem
 

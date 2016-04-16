@@ -1,7 +1,7 @@
 /**
  * Created by Zurburg on 1/22/2016.
  */
-var config = require('./.env'),
+var config = require('../.env'),
     cloudinary = require('cloudinary'),
     jsonfile = require('jsonfile'),
     request = require('request-json'),
@@ -94,9 +94,6 @@ function determineAction(newPost) {
 
 function prepareNewPost(newPost) {
     post = {};
-
-
-
 
     post.name = newPost.name;
     //post.publishedDate = newPost.pubDate;

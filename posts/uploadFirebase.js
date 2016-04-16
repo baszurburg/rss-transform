@@ -1,7 +1,7 @@
 /**
  * Created by Zurburg on 1/22/2016.
  */
-var config = require('./.env'),
+var config = require('../.env'),
     jsonfile = require('jsonfile'),
     request = require('request-json'),
     Firebase = require("firebase"),

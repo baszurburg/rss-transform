@@ -16,19 +16,28 @@
           src: ['test/fileSystem.js', 'readAppSite.js']
         },
         retrieve: {
-          src: ['readRSS.js', 'readAppSite.js']
+          src: ['posts/readRSS.js', 'posts/readAppSite.js']
         },
         rss: {
-          src: ['readRSS.js']
+          src: ['posts/readRSS.js']
         },
         retrieveAppSite: {
-          src: ['readAppSite.js']
+          src: ['posts/readAppSite.js']
         },
         upload: {
-          src: ['upload.js']
+          src: ['posts/upload.js']
         },
         uploadFirebase: {
-          src: ['uploadFirebase.js']
+          src: ['posts/uploadFirebase.js']
+        },
+        uploadFirebaseTeams: {
+          src: ['teams/uploadFirebaseTeams.js']
+        },
+        retrieveAppSiteTeams: {
+          src: ['teams/readAppSiteTeams.js']
+        },
+        retrieveAppSiteTrainers: {
+          src: ['teams/readAppSiteTrainers.js']
         },
         populateAgenda: {
           src: ['agenda/populateAgenda.js']
@@ -44,13 +53,21 @@
     grunt.task.loadNpmTasks('grunt-mkdir');
     grunt.loadNpmTasks('grunt-execute');
 
-    // retrieve the content (posts)
+    // posts:  retrieve the rss content & upload to appsite
     grunt.registerTask('rss', ['execute:rss']);
     grunt.registerTask('default', ['clean', 'mkdir', 'execute:retrieve']);
     grunt.registerTask('upload', ['execute:upload']);
     grunt.registerTask('retrieveAppSite', ['execute:retrieveAppSite']);
-    grunt.registerTask('uploadFirebase', ['execute:uploadFirebase']);
     grunt.registerTask('populate', ['clean', 'mkdir', 'execute:retrieve', 'upload', 'populateAgenda']);
+    grunt.registerTask('uploadFirebase', ['execute:uploadFirebase']);
+
+    // teams:
+    grunt.registerTask('retrieveTeams', ['execute:retrieveAppSiteTrainers', 'execute:retrieveAppSiteTeams']);
+    grunt.registerTask('uploadFirebaseTeams', ['execute:uploadFirebaseTeams']);
+    grunt.registerTask('populateFirebaseTeams', ['execute:retrieveAppSiteTrainers', 'execute:retrieveAppSiteTeams', 'execute:uploadFirebaseTeams']);
+
+
+    // retrieves post from the app site and upload to Firebase
     grunt.registerTask('processFirebase', ['execute:retrieveAppSite', 'execute:uploadFirebase']);
 
     // populate agenda
