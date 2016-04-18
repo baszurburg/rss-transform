@@ -16,16 +16,17 @@
   },
   "homepage": "https://github.com/baszurburg/rss-transform#readme",
   "dependencies": {
+    "cloudinary": "^1.3.0",
+    "feedparser": "^1.1.4",
+    "firebase": "latest",
     "grunt": "~0.4.2",
-    "grunt-mkdir": "^0.1.2",
     "grunt-contrib-clean": "^0.7.0",
     "grunt-execute": "^0.2.2",
+    "grunt-mkdir": "^0.1.2",
     "jsonfile": "^2.2.3",
-    "feedparser": "^1.1.4",
-    "sanitize-html":"^1.11.3",
     "request": "^2.0.0",
     "request-json": "^0.5.5",
-    "cloudinary": "^1.3.0",
-    "firebase": "latest"
+    "sanitize-html": "^1.11.3",
+    "tabletojson": "^0.4.0"
   }
 }

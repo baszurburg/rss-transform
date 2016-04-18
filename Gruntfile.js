@@ -41,6 +41,12 @@
         },
         populateAgenda: {
           src: ['agenda/populateAgenda.js']
+        },
+        populateProgramma: {
+          src: ['programs/populateProgramma.js']
+        },
+        populateUitslagen: {
+          src: ['programs/populateUitslagen.js']
         }
       },
       clean: {
@@ -66,6 +72,9 @@
     grunt.registerTask('uploadFirebaseTeams', ['execute:uploadFirebaseTeams']);
     grunt.registerTask('populateFirebaseTeams', ['execute:retrieveAppSiteTrainers', 'execute:retrieveAppSiteTeams', 'execute:uploadFirebaseTeams']);
 
+    // programma:
+    grunt.registerTask('populateProgramma', ['execute:populateProgramma']);
+    grunt.registerTask('populateUitslagen', ['execute:populateUitslagen']);
 
     // retrieves post from the app site and upload to Firebase
     grunt.registerTask('processFirebase', ['execute:retrieveAppSite', 'execute:uploadFirebase']);
