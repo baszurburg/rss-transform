@@ -47,6 +47,9 @@
         },
         populateUitslagen: {
           src: ['programs/populateUitslagen.js']
+        },
+        uploadClubs: {
+          src: ['clubs/upload-clubs.js']
         }
       },
       clean: {
@@ -71,6 +74,10 @@
     grunt.registerTask('retrieveTeams', ['execute:retrieveAppSiteTrainers', 'execute:retrieveAppSiteTeams']);
     grunt.registerTask('uploadFirebaseTeams', ['execute:uploadFirebaseTeams']);
     grunt.registerTask('populateFirebaseTeams', ['execute:retrieveAppSiteTrainers', 'execute:retrieveAppSiteTeams', 'execute:uploadFirebaseTeams']);
+
+    // clubs:
+    grunt.registerTask('uploadClubs', ['execute:uploadClubs']);
+
 
     // programma:
     grunt.registerTask('populateProgramma', ['execute:populateProgramma']);
