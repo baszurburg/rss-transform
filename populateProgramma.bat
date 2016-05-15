@@ -1,3 +1,1 @@
 grunt populateProgramma
-
-grunt populateUitslagen

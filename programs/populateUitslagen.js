@@ -50,7 +50,7 @@ tabletojson.convertUrl(config.uitslagenUrl)
 
         console.log('Processing Programma thuis');
 
-        // console.log(uitslagenT);
+        //console.log(uitslagenT);
 
         uitslagenTRef.set(uitslagenT, onCompleteT);
 
