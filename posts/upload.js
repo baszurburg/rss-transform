@@ -113,10 +113,10 @@ function prepareNewPost(newPost) {
         post.categories.push(catAlgemeen);
     }  else if (newPost.link.indexOf('jeugd-nieuws') !== -1 ) {
         post.categories.push(catJeugd);
-    } else if (newPost.link.indexOf('jeugd') !== -1 ) {
-        post.categories.push(catJeugd);
     } else if (newPost.link.indexOf('wedstrijd-verslagen') !== -1 ) {
         post.categories.push(catVerslagen);
+    } else if (newPost.link.indexOf('jeugd') !== -1 ) {
+        post.categories.push(catJeugd);
     } else {
         post.categories.push(catAlgemeen);
     }

@@ -50,6 +50,9 @@
         },
         uploadClubs: {
           src: ['clubs/upload-clubs.js']
+        },
+        retrieveAppSiteClubs: {
+          src: ['clubs/readAppSiteClubs.js']
         }
       },
       clean: {
@@ -77,7 +80,7 @@
 
     // clubs:
     grunt.registerTask('uploadClubs', ['execute:uploadClubs']);
-
+    grunt.registerTask('retrieveAppSiteClubs', ['execute:retrieveAppSiteClubs']);
 
     // programma:
     grunt.registerTask('populateProgramma', ['execute:populateProgramma']);

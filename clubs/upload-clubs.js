@@ -31,9 +31,12 @@ for (i=0; i < newClubsLength; i++) {
         console.log(newClub);
     }
 
-    client.post(clubsUrl, newClub, function(err, res, body) {
-        return console.log(res.statusCode);
-    });
+
+    setTimeout(function(){
+        client.post(clubsUrl, newClub, function(err, res, body) {
+            return console.log(res.statusCode);
+        });
+    },200);
 
 }
 
