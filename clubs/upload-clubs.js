@@ -25,18 +25,12 @@ var newClubs = jsonfile.readFileSync('data/voetbalclubs-nl.json'),
  **************************************************/
 
 for (i=0; i < newClubsLength; i++) {
-    var newClub = newClubs[i];
-
-    if (i < 10) {
-        console.log(newClub);
-    }
-
 
     setTimeout(function(){
+        var newClub = newClubs[i];
         client.post(clubsUrl, newClub, function(err, res, body) {
             return console.log(res.statusCode + err);
         });
-    },1000);
+    },500);
 
 }
-
