@@ -13,7 +13,7 @@ var client = request.createClient(config.host),
 
 // read datafiles
 
-var newClubs = jsonfile.readFileSync('data/voetbalclubs-nl.json'),
+var newClubs = jsonfile.readFileSync('data/voetbalclubs-tenues-nl.json'),
     newClubsLength = newClubs.length,
     i;
 
@@ -27,13 +27,15 @@ var newClubs = jsonfile.readFileSync('data/voetbalclubs-nl.json'),
 for (i=0; i < newClubsLength; i++) {
 
 
-    if (i < 10) {
-        console.log(newClub);
+    if (i < 3) {
+        console.log(newClubs[i]);
     }
 
     doPost(newClubs[i]);
 
 }
+
+console.log('length: ' + newClubsLength);
 
 function doPost(newClub) {
     setTimeout(function(){

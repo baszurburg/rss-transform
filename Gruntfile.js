@@ -48,6 +48,9 @@
         populateUitslagen: {
           src: ['programs/populateUitslagen.js']
         },
+        mergeClubs: {
+          src: ['clubs/merge-clubs.js']
+        },
         uploadClubs: {
           src: ['clubs/upload-clubs.js']
         },
@@ -79,6 +82,7 @@
     grunt.registerTask('populateFirebaseTeams', ['execute:retrieveAppSiteTrainers', 'execute:retrieveAppSiteTeams', 'execute:uploadFirebaseTeams']);
 
     // clubs:
+    grunt.registerTask('mergeClubs', ['execute:mergeClubs']);
     grunt.registerTask('uploadClubs', ['execute:uploadClubs']);
     grunt.registerTask('retrieveAppSiteClubs', ['execute:retrieveAppSiteClubs']);
 
